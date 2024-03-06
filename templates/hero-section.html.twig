@@ -1,0 +1,68 @@
+{{ attach_library('fa/herosection') }}
+{% if is_front %}
+	{# {{ dd(is_front) }} #}
+	<div class="hero-section">
+		<div class="hero-flex hero-flex--direction hero-flex--alignCenter hero-main--div">
+			{# <div class="hero-relative--terms">
+			            <div><span><i class="fas fa-balance-scale"></i></span><span>{{ 'Wills and Trusts'|t }}</span></div>
+			            <div><span><i class="fas fa-balance-scale"></i></span><span>{{ 'Power of Attorney'|t }}</span></div>
+			            <div><span><i class="fas fa-balance-scale"></i></span><span>{{ 'Legal Advice'|t }}</span></div>
+			            <div><span><i class="fas fa-balance-scale"></i></span><span>{{ 'Bank Account Opening'|t }}</span></div>
+			            <div><span><i class="fas fa-balance-scale"></i></span><span>{{ 'PRO Services'|t }}</span></div>
+			            <div><span><i class="fas fa-balance-scale"></i></span><span>{{ 'Business Set Up'|t }}</span></div>
+			        </div> #}
+			{# <div class="hero-relative--terms">
+			            <div><span>{{ 'Wills and Trusts'|t }}</span></div>
+			            <div><span>{{ 'Power of Attorney'|t }}</span></div>
+			            <div><span>{{ 'Legal Advice'|t }}</span></div>
+			            <div><span>{{ 'Bank Account Opening'|t }}</span></div>
+			            <div><span>{{ 'PRO Services'|t }}</span></div>
+			            <div><span>{{ 'Business Set Up'|t }}</span></div>
+			        </div> #}
+				<h1 class="hero-main--heading hero-text--center fw-bold"> Start Your Dream Business Today<br>Protect Your Hard-Earned Assets Forever</h1>
+			{# <p class="hero-para">{{'All with the assistance of expert advisors in the UAE'|t}}</p>
+			        <h6 class="hero-sub--heading">{{'What advice do you need today?'|t}}</h6> #}
+			<div>
+				<ul class="hero-button--ul">
+					{% for key, options in form.root_services['#value'] %}
+						{% set data_id = options|lower|replace({' ': '-'}) %}
+						<li class="hero-button--li {% if loop.first %}hero-button--active{% endif %}" data-id="{{ data_id }}">{{ options|t }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div>
+				{% for parent_tid, parent_name in form.root_services['#value'] %}
+					{% set parent_data_id = parent_name|lower|replace({' ': '-'}) %}
+					<div id="{{ parent_data_id }}" class="hero-flex {% if loop.first %}open{% endif %}">
+						<div class="dropdown hero-flex">
+							<div class="hero-flex hero-dropdown-padding--margin1">
+								<button type="button" class="dropbtn1">Search here for the services you need...</button>
+								<span class="hero-search--icon">
+									<i class="fa fa-search"></i>
+								</span>
+							</div>
+							<div class="dropdown-content">
+								{% if parent_tid == 27 %}
+									<a href="/services/company-formation/meydan-free-zone">Company Formation</a>
+									<a href="/services/banking-assistance">Banking</a>
+								{% else %}
+									<a href="/services/wills">Wills</a>
+									<a href="/services/power-attorney">Power of Attorney</a>
+								{% endif %}
+								{# {% for child_tid, child_names in form.root_child_services['#value'][parent_tid] %}
+								                                        <a href="#">{{ child_names }}</a>
+								                                    {% endfor %} #}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+
+			</div>
+			<div>
+				<ul class="hero-flex hero-features">
+					<span class="font-size--14">{{ 'Precision in Every Recommendation'|t }}</span>
+				</ul>
+			</div>
+		</div>
+	</div>
+{% endif %}

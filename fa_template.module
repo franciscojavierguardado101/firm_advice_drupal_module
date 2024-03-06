@@ -1,0 +1,297 @@
+<?php
+
+use Drupal\user\Entity\User;
+use Drupal\user\UserInterface;
+use Drupal\webform\WebformSubmissionInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Drupal\Core\Database\Database;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+
+/**
+ * Implements hook_theme().
+ */
+function fa_theme($existing, $type, $theme, $path)
+{
+  return [
+    'fa_hero_section' => [
+      'template' => 'hero-section',
+      'render element' => 'form'
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function fa_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id)
+{
+  if ($form_id === 'user_form') {
+    $form['field_stripe_customer_id']['#attributes']['readonly'] = 'readonly';
+  }
+  // Check if the form is a webform and the user is logged in.
+  if (strpos($form_id, 'webform_submission_adjd_wills_add_form') === 0 && \Drupal::currentUser()->isAuthenticated()) {
+    // Get the user's email.
+    $user_email = \Drupal::currentUser()->getEmail();
+    // Get the user entity.
+    $user_entity = User::load(\Drupal::currentUser()->id());
+    $full_name = $user_entity->get('field_name')->value;
+    if ($full_name) {
+      $form['elements']['personal_information']['flexbox']['your_name']['#default_value'] = $full_name;
+    }
+    // Check if the email field exists in the webform.
+    if (isset($form['elements']['personal_information']['flexbox']['e_mail_address'])) {
+      // Set the default value to the user's email.
+      $form['elements']['personal_information']['flexbox']['e_mail_address']['#default_value'] = $user_email;
+      $form['elements']['personal_information']['flexbox']['e_mail_address']['#attributes']['readonly'] = 'readonly';
+    }
+  }
+  if (strpos($form_id, 'webform_submission_adjd_wills_add_form') === 0 && $form['progress']['#current_page'] === 'additional_documents') {
+    // Add a custom "Save and Quit" button.
+    $form['actions']['save_and_quit'] = [
+      '#type' => 'submit',
+      '#value' => t('Save and Quit'),
+      '#submit' => ['fa_webform_save_and_quit_submit'],
+      '#limit_validation_errors' => [],
+    ];
+    // Add a custom "Pay Now" button.
+    $form['actions']['pay_now'] = [
+      '#type' => 'submit',
+      '#value' => t('Pay Now'),
+      '#submit' => ['fa_webform_pay_now_submit'],
+      '#limit_validation_errors' => [],
+    ];
+  }
+
+  if ($form_id === 'node_invoice_edit_form' || $form_id === 'node_invoice_form') {
+    $current_user = User::load(\Drupal::currentUser()->id());
+    $user_roles = $current_user->getRoles();
+    $form['field_invoice_number']['#disabled'] = TRUE;
+    $form['field_grand_total']['#disabled'] = TRUE;
+    $form['field_profit']['#disabled'] = TRUE;
+    if (!in_array('content_manager', $user_roles)) {
+      $form['field_paid']['#disabled'] = TRUE;
+      $form['field_invoice_number']['#disabled'] = TRUE;
+    }
+  }
+}
+
+/**
+ * Save and Quit function.
+ */
+function fa_webform_save_and_quit_submit($form, FormStateInterface $form_state)
+{
+  // Get the webform submission.
+  $webform_submission = $form_state->getFormObject()->getEntity();
+
+  // Save the webform submission.
+  $webform_submission->save();
+
+  $full_name = $webform_submission->getElementData('your_name');
+  $email = $webform_submission->getElementData('e_mail_address');
+  $common_service = \Drupal::service('fa.common_service');
+  $user_login_link = $common_service->createUser($full_name, $email);
+  if ($user_login_link) {
+    $subject = 'Your account has been created';
+    $message = 'Hi ' . $full_name . ',' . '<br/>' . '<br/> Your account has been created on FA. You can log in using the following link: <br/>' . $user_login_link . '<br/>' . '<br/> Warm Regards, <br/> FA';
+    $attachment_paths = '';
+    // Disabling email service till launch
+    $common_service->sendEmailWithAttachment($email, $subject, $message, $attachment_paths);
+  }
+  $form_state->setRedirect('<front>');
+}
+
+/**
+ * Pay now function.
+ */
+function fa_webform_pay_now_submit($form, $form_state)
+{
+  // Get the webform submission.
+  $webform_submission = $form_state->getFormObject()->getEntity();
+  // Check if the submission is new.
+  if ($webform_submission->isNew()) {
+    // Save the webform submission.
+    $webform_submission->save();
+    // Get the new submission ID.
+    $submission_id = $webform_submission->id();
+  } else {
+    // Submission ID for an existing submission.
+    $submission_id = $webform_submission->id();
+  }
+  if ($webform_submission->getWebform()->id() == 'adjd_wills') {
+    $common_service = \Drupal::service('fa.common_service');
+    $common_service->processWebformSubmission('adjd_wills', $submission_id);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave() for webform_submission.
+ */
+function fa_webform_submission_presave(WebformSubmissionInterface $webform_submission)
+{
+  if ($webform_submission->getWebform()->id() == 'request_for_quote' || $webform_submission->getWebform()->id() == 'best_price_guaranteed') {
+    // Get page referrer
+    $page_source = \Drupal::request()->server->get('HTTP_REFERER');
+
+    // Convert the full URL to a relative path.
+    $relative_path = parse_url($page_source, PHP_URL_PATH);
+
+    // Match the path to a route.
+    $request = Request::create($relative_path);
+    $route_match = \Drupal::service('router.no_access_checks')->matchRequest($request);
+
+    $data = $webform_submission->getData();
+    if ($route_match['node']) {
+      $data['page_source'] = $route_match['node']->getTitle();
+    }
+    $webform_submission->setData($data);
+  }
+}
+
+/**
+ * Implements HOOK_preprocess_webform
+ */
+function fa_preprocess_webform(&$variables)
+{
+  if ($variables['element']['#webform_id'] !== 'request_for_quote') {
+    $variables['#attached']['library'][] = 'firmadvice/firmadvice.fa_webform';
+  }
+}
+
+
+/**
+ * Implements hook_user_view().
+ */
+function fa_preprocess_user(&$variables)
+{
+  // Check if the user is viewing their own profile.
+  if ($variables['user']->id() == \Drupal::currentUser()->id()) {
+    // Load webform submissions.
+    $webform_ids = ['adjd_wills', 'webform_id_2', 'webform_id_3']; // Replace with your webform IDs.
+
+    $submissions = fa_load_webform_submissions($webform_ids);
+    $i = 0;
+    foreach ($submissions as $webform_id => $webform_submissions) {
+      foreach ($webform_submissions as $submission) {
+        $data = $submission->getData();
+        $timestamp = $submission->created->value;
+        // Convert the timestamp to a DateTime object.
+        $dateTime = new DateTime("@$timestamp");
+
+        // Get the local date and time formatted as "dd Month yyyy hh:mm."
+        $createdTime = $dateTime->format('d M Y H:i');
+        $variables['submissions'][$i]['created'] = $createdTime;
+
+        $variables['submissions'][$i]['email'] = $data['e_mail_address'];
+        $variables['submissions'][$i]['payment_status'] = $data['payment_status'];
+        $variables['submissions'][$i]['sid'] = $submission->id();
+        $variables['submissions'][$i]['package'] = strtoupper(str_replace('_', ' ', $webform_id . ' ' . $data['pricing_package']));
+        $i++;
+
+        // Get total price for the given submission.
+        $total_price = $data[$data['pricing_package']];
+        foreach ($data['additional_documents_v2'] as $additional_doc) {
+          $total_price += $data[$additional_doc . '_price'];
+        }
+
+        // Add VAT @5%;
+        $total_price += 0.05 * $total_price;
+        // Add Admin Fee @ 2.9%
+        $total_price += 0.029 * $total_price;
+        $variables['total_price'] = round($total_price, 2);
+      }
+    }
+  }
+}
+
+/**
+ * Helper function to load webform submissions.
+ */
+function fa_load_webform_submissions(array $webform_ids)
+{
+  $submissions = [];
+
+  // Get the current user.
+  $current_user = \Drupal::currentUser();
+  // Get the database connection.
+  $database = Database::getConnection();
+
+  // Get the user's email.
+  $email = $current_user->getEmail();
+
+  // Load webform submissions for each webform ID.
+  foreach ($webform_ids as $webform_id) {
+
+
+    // Build the SQL query to retrieve submission IDs.
+    $query = $database->select('webform_submission_data', 'wsd')
+      ->fields('wsd', ['sid'])
+      ->condition('wsd.webform_id', $webform_id)
+      ->condition('wsd.name', 'e_mail_address')
+      ->condition('wsd.value', $email);
+
+    // Execute the query.
+    $result = $query->execute();
+
+    // Fetch the submission IDs.
+    $submission_ids = $result->fetchCol();
+
+    $webform_submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+
+    $submissions[$webform_id] = $webform_submission_storage->loadMultiple($submission_ids);
+  }
+
+
+  return $submissions;
+}
+
+/**
+ * Implements hook_node_presave().
+ */
+function fa_node_presave($node) {
+  // Check if the node type is "invoice".
+  if ($node->isNew() && $node->getType() == 'invoice') {
+    // Check if the invoice number is not set (assuming your field is named 'field_invoice_number').
+    if (empty($node->field_invoice_number->value)) {
+      // Call your function to generate the invoice number.
+      $invoice_number = \Drupal::service('fa.common_service')->generateInvoiceNumber();
+      
+      // Set the generated invoice number to the field.
+      $node->field_invoice_number->setValue($invoice_number);
+
+    }
+  }
+  elseif ($node->getType() === 'invoice') {
+    // Calculate Grand Total & Profit.
+    $total_amount = 0;
+    $paragraph_items = $node->get('field_items')->getValue();
+
+    // Iterate through each paragraph item.
+    foreach ($paragraph_items as $item) {
+        // Load the paragraph entity.
+        $paragraph_entity = \Drupal::entityTypeManager()->getStorage('paragraph')->load($item['target_id']);
+
+        // Get the value of the field_amount.
+        $field_amount_value = $paragraph_entity->get('field_amount')->getValue();
+
+        // Add the value to the total amount.
+        $total_amount += $field_amount_value[0]['value'];
+    }
+    $profit = $total_amount - $node->get('field_cost_to_company')->getValue()[0]['value'];
+    $node->field_grand_total->setValue($total_amount);
+    $node->field_profit->setValue($profit);
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function fa_page_attachments(array &$attachments) {
+  // Check if the current route is an admin route.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    // Attach the library to the page.
+    $attachments['#attached']['library'][] = 'fa/admin';
+  }
+}
+

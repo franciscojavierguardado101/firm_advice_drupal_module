@@ -1,0 +1,29 @@
+fa.global_index:
+  path: '/admin/config/firm-advice'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'FA'
+  requirements:
+    _permission: 'administer site configuration'
+fa.template_mapping:
+  path: "/admin/config/firm-advice-template-mapping"
+  defaults:
+    _form: '\Drupal\fa\Form\TemplateMapping'
+    _title: "FA - Template Mapping"
+  requirements:
+    _permission: "administer site configuration"
+fa.send_email:
+  path: '/api/v1/send-email'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\fa\Controller\WebformSendEmail::webformEmailHandler'
+  requirements:
+    _access: 'TRUE'
+
+fa.send_email_invoice:
+  path: "/send-email/{nid}"
+  defaults:
+    _controller: '\Drupal\fa\Controller\InvoiceSendEmail::sendEmailInvoice'
+    _title: 'Send Email'
+  requirements:
+    _permission: 'access content'

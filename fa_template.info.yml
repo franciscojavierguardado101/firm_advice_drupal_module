@@ -1,0 +1,7 @@
+name: "FA"
+type: module
+description: "Provides configuration for FA."
+core_version_requirement: ^9 || ^10
+package: FA
+dependencies:
+  - drupal:config

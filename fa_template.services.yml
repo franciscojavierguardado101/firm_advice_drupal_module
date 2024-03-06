@@ -1,0 +1,7 @@
+services:
+  fa.document_builder:
+    class: Drupal\fa\FADocumentBuilderService
+    arguments: ['@logger.factory']
+  fa.common_service:
+    class: Drupal\fa\FaCommonService
+    arguments: ['@entity_type.manager','@logger.factory','@renderer','@messenger', '@language_manager', '@plugin.manager.mail', '@config.factory', '@current_user']

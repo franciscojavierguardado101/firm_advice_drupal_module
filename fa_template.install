@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the fa module.
+ */
+
+function firmadvice_scheme() {
+  $schema['firmAdviceWebformTemplate'] = [
+    'description' => 'Stores webform name, document uploaded, enabled.',
+    'fields' => [
+      'id' => [
+        'description' => 'Auto-generated ID for the record.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'enable' => [
+        'description' => 'Status of webform.',
+        'type' => 'int',
+        'default' => 0,
+        'not null' => TRUE,
+      ],
+      'uploaded_document_path' => [
+        'description' => 'Path to the uploaded document.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'webform_name' => [
+        'description' => 'Name of the associated webform.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id']
+  ];
+
+  return $schema;
+}

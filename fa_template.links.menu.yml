@@ -1,0 +1,12 @@
+fa.global_index:
+  title: FA
+  route_name: fa.global_index
+  parent: system.admin_config
+  description: 'Configure functionality for FA'
+  weight: -100
+fa.template_mapping:
+  title: "FA Template Mapping"
+  parent: fa.global_index
+  description: "Configure FA Templates"
+  route_name: fa.template_mapping
+  weight: 100

@@ -1,0 +1,44 @@
+.footer-aggregation .views-field-field-grand-total,
+.footer-aggregation .views-field-field-profit {
+  display: flex;
+  /* flex-direction: column; */
+}
+.views-field-field-grand-total span,
+.views-field-field-profit span {
+  width: 250px;
+}
+
+.year-select-container {
+  margin: 10px 0;
+  text-align: center;
+  background: var(--color-blue-100);
+  padding: 10px;
+}
+
+.year-select {
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.dynamic-links a {
+  text-decoration: none;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.dynamic-links {
+  display: flex;
+  gap: 2.3em;
+  background: var(--color-bgblue-active);
+  padding: 10px;
+  overflow: scroll;
+}
+.dynamic-links a.active {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.gin-layer-wrapper {
+  overflow: auto;
+}

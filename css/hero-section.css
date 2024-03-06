@@ -1,0 +1,505 @@
+.hero-flex {
+    display: flex;
+}
+
+.hero-flex--direction {
+    flex-direction: column;
+}
+
+.hero-flex--alignCenter {
+    align-items: center;
+}
+
+.hero-flex-justifyCenter {
+    justify-content: center;
+}
+
+.hero-text--center{
+    text-align: center;
+}
+
+.hero-gap--40 {
+    gap:40px
+}
+
+.hero-gap--100 {
+    gap:100px
+}
+
+.hero-main--div{
+    color: white;
+    padding: 140px 166px 170px 166px;
+    position: relative;
+}
+
+.hero-relative--terms div{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid #fff;
+    background: transparent;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: 700;
+    /* opacity: 0.5; */
+    padding: 8px;
+    line-height: 1.3;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.4s; 
+}
+
+.hero-relative--terms div:nth-child(1) {
+    top: 45px;
+    left: 240px;
+}   
+
+.hero-relative--terms div:nth-child(2) {
+    top: 290px;
+    left: 160px;
+}    
+
+.hero-relative--terms div:nth-child(3) {
+    top: 530px;
+    left: 180px;
+}    
+
+.hero-relative--terms div:nth-child(4) {
+    top: 520px;
+    right: 170px;
+}  
+
+.hero-relative--terms div:nth-child(5) {
+    top: 280px;
+    right: 260px;
+}  
+
+.hero-relative--terms div:nth-child(6) {
+    top: 30px;
+    right: 240px;
+}  
+
+.hero-relative--terms div:hover {
+    opacity: 1;
+    background: #fff;
+    color: #333
+}
+
+/* .hero-relative--terms div {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid transparent; 
+    width: 152px;
+    height: 152px;
+    background: transparent;
+    border-radius: 50%;
+    overflow: hidden; 
+    transition: all 0.3s; 
+}
+
+.hero-relative--terms div span {
+    text-align: center;
+    font-weight: 700;
+    padding: 10px 12px 0 12px;
+    color: transparent; 
+    transition: color 0.6s;
+    line-height: 1.2;
+}
+
+/* Style for the icon */
+/* .hero-relative--terms div i {
+    font-size: 50px;
+    opacity: 0.5;
+    color: #fff;
+    transition: all 0.6s; 
+}
+
+.hero-relative--terms div:hover {
+    border-color: #fff;
+    background: linear-gradient(170deg,rgba(117,59,189,0.6) 18%,rgba(0,169,206,0.6) 75.21%,rgba(0,169,206,0.6) 100%);
+}
+
+.hero-relative--terms div:hover span {
+    color: #fff; 
+}
+
+.hero-relative--terms div:hover i {
+    opacity: 1;
+    color: #fff; 
+}  */
+
+.hero-main--heading {
+    font-size: 48px;
+    color: white;
+    margin: 12px 0 28px 0;
+    font-weight: 700;
+}
+
+.hero-sub--heading {
+    font-size: 26px;
+    color: white;
+}
+
+
+.hero-button--ul {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    padding: 10px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+.hero-button--li {
+    padding: 14px 26px;
+    border: 1px solid white;
+    border-radius: 4px;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.hero-button--active{
+    background-color: white;
+    color: black;
+}
+
+.hero-dropdown-padding--margin1{
+    margin-top: 16px;
+    padding: 12px;
+    /* background: linear-gradient(135deg, rgba(117, 59, 189, 0.4) 18%, rgba(0, 169, 206, 0.4) 75.21%, rgba(0, 169, 206, 0.4) 100%); */
+    background: #fff;
+    border: 1px solid #fff;
+    border-radius: 14px;
+}
+
+.hero-search--icon{
+
+    padding: 10px 14px;
+    background-color: #fff;
+}
+
+.hero-features {
+    justify-content: center;
+    margin-top: 32px;
+    padding: 0px;
+    gap: 24px;
+    font-size: 18px;
+    font-weight: 700;
+    /* color: #fff; */
+}
+
+.hero-review--feature{
+    margin-top: 40px;
+    /* color: #fff; */
+}
+
+/* Style the dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 900px;
+  }
+  
+  /* Style the button that triggers the dropdown */
+  .dropbtn1 {
+    background-color: transparent;
+    color: #1a1a1a;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    text-align: start;
+    width: 100%;
+    /* margin-top: 12px; */
+    /* border-radius: 8px; */
+  }
+  .fa-search {
+    color: #1a1a1a;
+  }
+  
+  /* Style the dropdown content */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    margin-top: -6px;
+    width: 100%;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* Style the links inside the dropdown content */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color on hover */
+  .dropdown-content a:hover {
+    background: linear-gradient(340deg,rgba(117,59,189,1) 18%,rgba(0,169,206,1) 75.21%,rgba(0,169,206,1) 100%);
+  }
+  
+  /* Show the dropdown content when the button is hovered */
+
+  /* .dropbtn:hover {
+    border-radius: 8px 8px 0 0;
+  } */
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  .dropdown:hover .hero-dropdown-padding--margin1{
+    border-radius: 14px 14px 0px 0px;
+
+  }
+  
+
+  @media only screen and (max-width: 1440px) {
+    .hero-relative--terms div:nth-child(1) {
+        left: 120px;
+    }   
+    
+    .hero-relative--terms div:nth-child(2) {
+        left: 80px;
+    }    
+    
+    .hero-relative--terms div:nth-child(3) {
+        left: 100px;
+    }    
+    
+    .hero-relative--terms div:nth-child(4) {
+        right: 110px;
+    }  
+    
+    .hero-relative--terms div:nth-child(5) {
+        right: 180px;
+    }  
+    
+    .hero-relative--terms div:nth-child(6) {
+        right: 120px;
+    }  
+  }
+
+  /* Large devices (laptops/desktops, 1220px and below) */
+@media only screen and (max-width: 1220px) {
+    .hero-main--heading{
+        font-size: 32px;
+        margin: 10px 0 16px 0;
+        /* width: 90%; */
+    }
+    .hero-main--div{
+        padding: 120px 100px 140px 100px;
+    }
+
+    .hero-relative--terms {
+        display: none;
+    }
+
+    .hero-sub--heading {
+        font-size: 20px;
+    }
+
+    .hero-button--ul {
+        margin-top: 10px;
+        padding: 6px;
+    }
+
+    .hero-button--li {
+        padding: 9px 16px;
+        font-size: 16px;
+    }
+
+    .hero-dropdown-padding--margin1 {
+        margin-top: 10px;
+        padding: 8px;
+    }
+
+    .dropdown {
+        width: 750px !important;
+    }
+
+    .dropdown-content a {
+        padding: 6px 12px;
+    }
+}
+
+
+/* Medium devices (landscape tablets, 885px and below) */
+@media only screen and (max-width: 885px) {
+    .dropdown {
+        width: 500px !important;
+    }
+
+    .hero-para{
+        margin-bottom: 0px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .dropdown-content {
+        margin-top: 0px;
+      }
+
+    .hero-dropdown-padding--margin1 {
+        margin-top: 0px;  
+    }    
+      
+    .dropdown-content a {
+       padding: 4px 10px;
+       font-size: 14px;
+    }
+
+    .hero-main--heading{
+        font-size: 24px;
+        margin: 6px 0 0 0;
+        width: 100%;
+    }
+
+    .hero-sub--heading {
+        font-size: 18px;
+        margin-bottom: 0;
+    }
+
+    .hero-button--ul {
+        margin-top: 4px;
+        padding: 4px;
+    }
+
+    .hero-button--li {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+
+    .hero-features{
+        margin-top: 12px;
+        gap: 24px;
+        font-size: 14px;
+        font-weight: 500;
+        /* color: #fff; */
+    }
+
+    .hero-review--feature {
+        margin-top: 16px;
+    }
+
+    .dropbtn1 {
+        padding: 4px 2px;
+        font-size: 14px;
+    }
+
+    .hero-search--icon {
+        padding: 8px 12px;
+        font-size: 14px;
+    }    
+
+    .hero-client-reviews {
+        font-size: 12px;
+    }
+
+    .hero-featured--in {
+        font-size: 12px;
+    }
+
+    .hero-client-reviews p {
+       margin-bottom: 8px;
+    }
+
+    .hero-featured--in p {
+        margin-bottom: 8px;
+    }
+
+    .hero-gap--40 {
+        gap: 20px
+    }
+
+    .hero-gap--100 {
+        gap: 40px
+    }
+
+    .hero-main--div {
+        color: white;
+        padding: 28px 45px 60px 45px;
+        gap: 12px;
+    }
+}
+
+  /* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 572px) {
+    .hero-main--div {
+        padding: 18px 24px 40px 24px;
+        gap: 12px;
+    } 
+
+    .font-size--14 {
+        font-size: 14px;
+    }
+
+    .hero-main--heading {
+        font-size: 20px;
+        /* width: 100%; */
+        padding-top: 20px;
+    }
+
+    .hero-para {
+        font-size: 18px;
+        padding-top: 20px;
+    }
+
+    .dropdown-content a {
+        font-size: 12px;
+     }
+
+    .hero-review--feature {
+        flex-direction: column;
+    }
+
+    .hero-gap--100 {
+        gap: 16px;
+    }
+
+    .hero-button--ul {
+        margin-top: 0px;
+        padding: 0px;
+        gap: 12px;
+        padding-top: 20px;
+    }
+
+    .hero-button--li {
+        padding: 3px 5px;
+        font-size: 14px;
+    }
+
+    .hero-dropdown-padding--margin1 {
+        /* margin-top: 0px; */
+        padding: 6px;
+    }
+
+    .dropdown {
+        width: 320px !important;
+    }
+
+    .dropbtn1 {
+        font-size: 12px;
+    }
+
+    /* .hero-search--icon {
+        font-size: 16px;
+    }    */
+
+    .hero-button--li {
+        border-radius: 2px;
+    }
+    .hero-features {
+        font-size: 18px;
+    }
+}

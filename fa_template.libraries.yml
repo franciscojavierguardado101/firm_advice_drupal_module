@@ -1,0 +1,17 @@
+herosection:
+   css:
+      theme:
+         css/hero-section.css: {}
+   js:
+      js/hero-section.js: {}
+   dependencies:
+      - core/jquery
+
+admin:
+   css:
+      theme:
+         css/admin.css: {}
+   js:
+      js/admin.js: {}
+   dependencies:
+      - core/jquery

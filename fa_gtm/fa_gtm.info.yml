@@ -1,0 +1,5 @@
+name: FA - Capture Custom Events for GTM
+type: module
+description: An implementation of Custom Events for GTM.
+package: FA
+core_version_requirement: ^9 || ^10
